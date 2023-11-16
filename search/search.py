@@ -116,8 +116,29 @@ def depthFirstSearch(problem: SearchProblem):
 
 def breadthFirstSearch(problem: SearchProblem):
     """Search the shallowest nodes in the search tree first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    queue = util.Queue()
+
+    queue.push((problem.getStartState(), []))
+    visited = set()
+
+    while not queue.isEmpty():
+        state, actions = queue.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+
+            visited.add(state)
+            successors = problem.getSuccessors(state)
+
+            if successors is not None:
+                for successor in successors:
+                    state, action, cost = successor
+                    if state not in visited:
+                        new_action = actions + [action]
+                        queue.push((state, new_action))
+    return []
 
 
 def uniformCostSearch(problem: SearchProblem):
@@ -158,9 +179,28 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    visited = set()
+    queue = util.PriorityQueue()
+    queue.push((problem.getStartState(), [], 0), 0)
 
+    while not queue.isEmpty():
+        state, actions, cost_s = queue.pop()
+
+        if problem.isGoalState(state):
+            return actions
+
+        if state not in visited:
+            visited.add(state)
+
+            for successor in problem.getSuccessors(state):
+                state_u, action_u, cost_u = successor
+
+                if state_u not in visited:
+                    cost_t = (cost_s + cost_u) + heuristic(state_u, problem)
+                    newNode = (state_u, actions + [action_u], cost_s + cost_u)
+                    queue.push(newNode, cost_t)
+
+    return []
 
 # Abbreviations
 bfs = breadthFirstSearch
