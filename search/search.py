@@ -202,6 +202,7 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
 
     return []
 
+
 # Abbreviations
 bfs = breadthFirstSearch
 dfs = depthFirstSearch
